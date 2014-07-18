@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqlroot>
-	<sql name="" desc="">
+	<sql name="blog.category.getCategoryTreeListByParentCategoryId" desc="根据父id查询子类别">
 	<![CDATA[
+		SELECT   c.ID, c.category_name, c.serial_num, NVL (d.totalcount, 0) totalcount
+		    FROM t_blog_category c
+		         LEFT JOIN
+		         (SELECT   b.ID, COUNT (1) totalcount
+		              FROM t_blog_category a
+		                   JOIN
+		                   (SELECT ID
+		                      FROM t_blog_category
+		                     WHERE parent_category_id = :parentCategoryId) b
+		                   ON b.ID = a.parent_category_id
+		          GROUP BY b.ID) d ON d.ID = c.ID
+		   WHERE c.parent_category_id = :parentCategoryId
+		ORDER BY c.serial_num
+	]]>
+	</sql>
+
+	<sql name="blog.category.getCategoryList" desc="获取所有类别">
+	<![CDATA[
+		SELECT     ID, category_name, parent_category_id
+		      FROM t_blog_category
+		START WITH parent_category_id = 0
+		CONNECT BY PRIOR ID = parent_category_id
+	]]>
+	</sql>
+
+	<sql name="blog.article.getArticleListBycategoryId_page" desc="根据类别id获取文章">
+	<![CDATA[
+		SELECT   a.ID, a.title, b.category_name,
+		         TO_CHAR (a.create_time, 'yyyy-mm-dd hh24:mi') create_time
+		    FROM t_blog_article a
+		         JOIN
+		         (SELECT     ID, category_name
+		                FROM t_blog_category
+		          START WITH ID = :categoryId
+		          CONNECT BY PRIOR ID = parent_category_id) b ON b.ID = a.category_id
+		ORDER BY a.ID DESC
 	]]>
 	</sql>
 </sqlroot>

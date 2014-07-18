@@ -10,6 +10,8 @@ public class TBlogArticle extends BaseBean {
 	private String content;
 	private Long categoryId;
 
+	private String categoryName;
+
 	public String getTitle() {
 		return title;
 	}
@@ -32,6 +34,14 @@ public class TBlogArticle extends BaseBean {
 
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 }

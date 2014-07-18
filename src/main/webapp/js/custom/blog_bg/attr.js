@@ -35,7 +35,7 @@ Ext.onReady(function(){
         renderTo: "attr",
 		store: store_attrGrid,
 		width: "100%",
-		height: document.documentElement.clientHeight - 127,
+		height: document.documentElement.clientHeight - 125,
 		border: false,
         collapsible: false,
         multiSelect: false,
@@ -87,7 +87,7 @@ Ext.onReady(function(){
     		if (record.get("id")) {
     			message.confirm("是否删除记录？", function(){
     				$.post(basePath + "resource/attr/delAttr", {
-    					id: record.get("id"),
+    					id: record.get("id")
     				}, function(data){
     					if (data.success) {
     						message.info(data.message);
