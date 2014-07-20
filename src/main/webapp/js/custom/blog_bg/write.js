@@ -45,7 +45,7 @@ Ext.onReady(function(){
             ]},
             {xtype: "container", layout:"column", margin: "0 0 5 0", items: [
   				{xtype: "container", width: 500, margin: "0 10 0 0", layout: "anchor", items: [
-  	                {name: "tag", xtype: "textfield", fieldLabel: "文章标签"}
+  	                {name: "tags", xtype: "textfield", fieldLabel: "文章标签"}
   	            ]},
   				{xtype: "container", layout: "anchor", items: [
   	                {xtype: "label", text: "（最多添加5个标签，多个标签之间用英文“,”分隔）", style: {"line-height": "20px"}}
@@ -61,11 +61,38 @@ Ext.onReady(function(){
 	
 	/** ------------------------------------- handler ------------------------------------- */
 	function addOrUpdateArticleHandler(){
-		var values = panel_addOrUpdate_article.getForm().getValues();
-		console.log(values);
+		var form = panel_addOrUpdate_article.getForm();
+		var title = form.findField("title");
+		var categoryId = form.findField("categoryId");
+		if (!title.isValid()) {
+			message.error(title.invalidText);
+		} else if (!categoryId.isValid()) {
+			message.error(categoryId.invalidText);
+		} else {
+			var url;
+			if (form.findField("id").getValue()) {
+				url = basePath + "resource/article/updateArticle";
+			} else {
+				url = basePath + "resource/article/addArticle";
+			}
+			form.submit({
+				url: url,
+				method: "POST",
+				success: function(form, action){
+					message.info(action.result.msg, function(){
+						removeCurrentTab();
+					});
+				},
+				failure: function(form, action){
+					message.error(action.result.msg);
+				}
+			});
+		}
 	}
 	
 	function cancelHandler(){
-		
+		message.confirm("确定要离开当前页面？", function(){
+			removeCurrentTab();
+		});
 	}
 });
