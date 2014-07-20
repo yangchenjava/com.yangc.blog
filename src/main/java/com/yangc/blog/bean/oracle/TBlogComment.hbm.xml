@@ -28,6 +28,11 @@
 				<comment>博文ID</comment>
 			</column>
 		</property>
+		<property name="ipAddress" type="java.lang.String">
+			<column name="IP_ADDRESS" length="200">
+				<comment>IP地址</comment>
+			</column>
+		</property>
 		<property name="createTime" type="java.util.Date">
 			<column name="CREATE_TIME" length="7">
 				<comment>创建时间</comment>

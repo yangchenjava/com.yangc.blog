@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.yangc.blog.bean.oracle.TBlogArticle;
 import com.yangc.blog.service.ArticleService;
+import com.yangc.blog.service.CommentService;
+import com.yangc.blog.service.TagService;
 import com.yangc.dao.BaseDao;
 import com.yangc.dao.JdbcDao;
 
@@ -21,27 +23,51 @@ public class ArticleServiceImpl implements ArticleService {
 	private BaseDao baseDao;
 	@Autowired
 	private JdbcDao jdbcDao;
+	@Autowired
+	private TagService tagService;
+	@Autowired
+	private CommentService commentService;
 
 	@Override
-	public void addOrUpdateArticle(Long articleId, String title, String content, Long categoryId) {
+	public void addOrUpdateArticle(Long articleId, String title, String content, Long categoryId, String tags) {
 		TBlogArticle article = (TBlogArticle) this.baseDao.get(TBlogArticle.class, articleId);
 		if (article == null) {
 			article = new TBlogArticle();
+		} else {
+			this.tagService.delTagsByArticleId(articleId);
 		}
 		article.setTitle(title);
 		article.setContent(content);
 		article.setCategoryId(categoryId);
 		this.baseDao.save(article);
+		this.tagService.addTags(tags, article.getId());
 	}
 
 	@Override
 	public void delArticle(Long articleId) {
 		this.baseDao.updateOrDelete("delete TBlogArticle where id = ?", new Object[] { articleId });
+		this.tagService.delTagsByArticleId(articleId);
+		this.commentService.delCommentsByArticleId(articleId);
 	}
 
 	@Override
-	public TBlogArticle getArticle(Long articleId) {
-		return (TBlogArticle) this.baseDao.get(TBlogArticle.class, articleId);
+	public TBlogArticle getArticleById(Long articleId) {
+		String sql = JdbcDao.SQL_MAPPING.get("blog.article.getArticleById");
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("articleId", articleId);
+		List<Map<String, Object>> mapList = this.jdbcDao.find(sql, paramMap);
+		if (mapList == null || mapList.isEmpty()) return null;
+
+		Map<String, Object> map = mapList.get(0);
+		TBlogArticle article = new TBlogArticle();
+		article.setId(MapUtils.getLong(map, "ID"));
+		article.setTitle(MapUtils.getString(map, "TITLE"));
+		article.setContent(MapUtils.getString(map, "CONTENT"));
+		article.setCategoryId(MapUtils.getLong(map, "CATEGORY_ID"));
+		article.setCategoryName(MapUtils.getString(map, "CATEGORY_NAME"));
+		article.setTags(MapUtils.getString(map, "TAGS"));
+		article.setCreateTimeStr(MapUtils.getString(map, "CREATE_TIME"));
+		return article;
 	}
 
 	@Override

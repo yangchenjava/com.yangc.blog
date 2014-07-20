@@ -27,6 +27,11 @@
 	]]>
 	</sql>
 
+	<sql name="blog.article.getArticleById" desc="根据id获取文章">
+	<![CDATA[
+	]]>
+	</sql>
+
 	<sql name="blog.article.getArticleListBycategoryId_page" desc="根据类别id获取文章">
 	<![CDATA[
 		SELECT   a.ID, a.title, b.category_name,
@@ -38,6 +43,21 @@
 		          START WITH ID = :categoryId
 		          CONNECT BY PRIOR ID = parent_category_id) b ON b.ID = a.category_id
 		ORDER BY a.ID DESC
+	]]>
+	</sql>
+
+	<sql name="blog.tag.addTags" desc="添加标签">
+	<![CDATA[
+	]]>
+	</sql>
+
+	<sql name="blog.comment.getCommentListByArticleId" desc="根据文章id获取评论">
+	<![CDATA[
+	]]>
+	</sql>
+
+	<sql name="blog.comment.getCommentList_page" desc="分页获取所有评论">
+	<![CDATA[
 	]]>
 	</sql>
 </sqlroot>

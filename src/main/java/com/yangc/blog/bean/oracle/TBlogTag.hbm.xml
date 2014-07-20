@@ -23,25 +23,5 @@
 				<comment>博文ID</comment>
 			</column>
 		</property>
-		<property name="createUser" type="java.lang.Long">
-			<column name="CREATE_USER" precision="22" scale="0">
-				<comment>创建者</comment>
-			</column>
-		</property>
-		<property name="createTime" type="java.util.Date">
-			<column name="CREATE_TIME" length="7">
-				<comment>创建时间</comment>
-			</column>
-		</property>
-		<property name="updateUser" type="java.lang.Long">
-			<column name="UPDATE_USER" precision="22" scale="0">
-				<comment>修改者</comment>
-			</column>
-		</property>
-		<property name="updateTime" type="java.util.Date">
-			<column name="UPDATE_TIME" length="7">
-				<comment>修改时间</comment>
-			</column>
-		</property>
 	</class>
 </hibernate-mapping>

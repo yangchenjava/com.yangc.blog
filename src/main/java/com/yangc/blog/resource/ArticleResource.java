@@ -50,9 +50,9 @@ public class ArticleResource {
 	@RequestMapping(value = "getArticle", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("article:" + Permission.SEL)
-	public TBlogArticle getArticle(Long articleId) {
-		logger.info("getArticle - articleId=" + articleId);
-		return this.articleService.getArticle(articleId);
+	public TBlogArticle getArticle(Long id) {
+		logger.info("getArticle - id=" + id);
+		return this.articleService.getArticleById(id);
 	}
 
 	/**
@@ -64,10 +64,10 @@ public class ArticleResource {
 	@RequestMapping(value = "addArticle", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("article:" + Permission.ADD)
-	public ResultBean addArticle(String title, String content, Long categoryId) {
-		logger.info("addArticle - title=" + title + ", content=" + content + ", categoryId=" + categoryId);
+	public ResultBean addArticle(String title, String content, Long categoryId, String tags) {
+		logger.info("addArticle - title=" + title + ", content=" + content + ", categoryId=" + categoryId + ", tags=" + tags);
 		try {
-			this.articleService.addOrUpdateArticle(null, title, content, categoryId);
+			this.articleService.addOrUpdateArticle(null, title, content, categoryId, tags);
 			return new ResultBean(true, "添加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,10 +84,10 @@ public class ArticleResource {
 	@RequestMapping(value = "updateArticle", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("article:" + Permission.UPD)
-	public ResultBean updateArticle(Long id, String title, String content, Long categoryId) {
-		logger.info("updateArticle - id=" + id + ", title=" + title + ", content=" + content + ", categoryId=" + categoryId);
+	public ResultBean updateArticle(Long id, String title, String content, Long categoryId, String tags) {
+		logger.info("updateArticle - id=" + id + ", title=" + title + ", content=" + content + ", categoryId=" + categoryId + ", tags=" + tags);
 		try {
-			this.articleService.addOrUpdateArticle(id, title, content, categoryId);
+			this.articleService.addOrUpdateArticle(id, title, content, categoryId, tags);
 			return new ResultBean(true, "修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();
