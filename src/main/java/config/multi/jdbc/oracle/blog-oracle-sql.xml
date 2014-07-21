@@ -29,6 +29,17 @@
 
 	<sql name="blog.article.getArticleById" desc="根据id获取文章">
 	<![CDATA[
+		SELECT a.ID, a.title, a.content, a.category_id, b.category_name, c.tags, a.create_time
+		  FROM (SELECT ID, title, content, category_id, TO_CHAR (create_time, 'yyyy-mm-dd hh24:mi') create_time
+		          FROM t_blog_article
+		         WHERE ID = :articleId) a
+		       JOIN
+		       t_blog_category b ON b.ID = a.category_id
+		       LEFT JOIN
+		       (SELECT   wmsys.wm_concat (tag_name) tags, article_id
+		            FROM t_blog_tag
+		           WHERE article_id = :articleId
+		        GROUP BY article_id) c ON c.article_id = a.ID
 	]]>
 	</sql>
 
@@ -48,16 +59,24 @@
 
 	<sql name="blog.tag.addTags" desc="添加标签">
 	<![CDATA[
+		INSERT INTO t_blog_tag (ID, tag_name, article_id) VALUES (hibernate_seq.NEXTVAL, ?, ?)
 	]]>
 	</sql>
 
 	<sql name="blog.comment.getCommentListByArticleId" desc="根据文章id获取评论">
 	<![CDATA[
+		SELECT   ID, NAME, content, ip_address, TO_CHAR (create_time, 'yyyy-mm-dd hh24:mi') create_time
+		    FROM t_blog_comment
+		   WHERE article_id = :articleId
+		ORDER BY ID DESC
 	]]>
 	</sql>
 
 	<sql name="blog.comment.getCommentList_page" desc="分页获取所有评论">
 	<![CDATA[
+		SELECT   a.ID, a.NAME, a.content, a.article_id, b.title, a.ip_address, TO_CHAR (a.create_time, 'yyyy-mm-dd hh24:mi') create_time
+		    FROM t_blog_comment a JOIN t_blog_article b ON b.ID = a.article_id
+		ORDER BY a.ID DESC
 	]]>
 	</sql>
 </sqlroot>

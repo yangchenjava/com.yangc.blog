@@ -24,7 +24,7 @@ public class TagServiceImpl implements TagService {
 		if (StringUtils.isNotBlank(tags)) {
 			String sql = JdbcDao.SQL_MAPPING.get("blog.tag.addTags");
 			List<Object[]> paramList = new ArrayList<Object[]>();
-			for (String tag : tags.split(",")) {
+			for (String tag : tags.replaceAll("，", ",").split(",")) {
 				paramList.add(new Object[] { tag, articleId });
 			}
 			this.jdbcDao.batchExecute(sql, paramList);
