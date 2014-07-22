@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yangc.bean.DataGridBean;
 import com.yangc.bean.ResultBean;
 import com.yangc.blog.bean.oracle.TBlogComment;
 import com.yangc.blog.service.CommentService;
@@ -34,9 +35,10 @@ public class CommentResource {
 	@RequestMapping(value = "getCommentList_page", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("comment:" + Permission.SEL)
-	public List<TBlogComment> getCommentList_page() {
+	public DataGridBean getCommentList_page() {
 		logger.info("getCommentList_page");
-		return this.commentService.getCommentList_page();
+		List<TBlogComment> commentList = this.commentService.getCommentList_page();
+		return new DataGridBean(commentList);
 	}
 
 	/**

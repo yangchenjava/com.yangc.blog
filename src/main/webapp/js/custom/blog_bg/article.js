@@ -31,7 +31,12 @@ Ext.onReady(function(){
 			},
 			url: basePath + "resource/category/getCategoryList"
 		},
-		autoLoad: true
+		autoLoad: true,
+		listeners: {
+    		load: function(thiz, records, successful, eOpts){
+    			editArticle();
+    		}
+    	}
 	});
 	
 	/** ------------------------------------- view ------------------------------------- */
@@ -130,24 +135,26 @@ Ext.onReady(function(){
 		});
 	}
 	
-	if (index.articleId) {
-		$.post(basePath + "resource/article/getArticle", {
-			id: index.articleId
-		}, function(data){
-			delete index.articleId;
-			if (data) {
-				var record = Ext.create("Article", {
-					id: data.id,
-					title: data.title,
-					content: data.content,
-					categoryId: data.categoryId,
-					categoryName: data.categoryName,
-					tags: data.tags,
-					createTimeStr: data.createTimeStr
-				});
-				panel_addOrUpdate_article.getForm().reset();
-				panel_addOrUpdate_article.getForm().loadRecord(record);
-			}
-		});
+	function editArticle(){
+		if (index.articleId) {
+			$.post(basePath + "resource/article/getArticle", {
+				id: index.articleId
+			}, function(data){
+				delete index.articleId;
+				if (data) {
+					var record = Ext.create("Article", {
+						id: data.id,
+						title: data.title,
+						content: data.content,
+						categoryId: data.categoryId,
+						categoryName: data.categoryName,
+						tags: data.tags,
+						createTimeStr: data.createTimeStr
+					});
+					panel_addOrUpdate_article.getForm().reset();
+					panel_addOrUpdate_article.getForm().loadRecord(record);
+				}
+			});
+		}
 	}
 });
