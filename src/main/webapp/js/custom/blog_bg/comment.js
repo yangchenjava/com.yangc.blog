@@ -89,7 +89,7 @@ Ext.onReady(function(){
                 ]}
             ]},
 			{name: "name", xtype: "textfield", fieldLabel: "评论人", readOnly: true},
-			{name: "content", xtype: "numberfield", fieldLabel: "评论内容", readOnly: true}
+			{name: "content", xtype: "textarea", fieldLabel: "评论内容", readOnly: true}
 		]
 	});
     Ext.define("window_info_comment", {

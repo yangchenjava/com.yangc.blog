@@ -50,9 +50,9 @@ public class ArticleResource {
 	@RequestMapping(value = "getArticle", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions("article:" + Permission.SEL)
-	public TBlogArticle getArticle(Long id) {
-		logger.info("getArticle - id=" + id);
-		return this.articleService.getArticleById(id);
+	public TBlogArticle getArticle(Long id, int foreOrBack) {
+		logger.info("getArticle - id=" + id + ", foreOrBack=" + foreOrBack);
+		return this.articleService.getArticleById(id, foreOrBack);
 	}
 
 	/**

@@ -17,6 +17,8 @@ Ext.define("Article", {
         {name: "id",            type: "int"},
         {name: "title",         type: "string"},
         {name: "categoryName",  type: "string"},
+        {name: "readCount",     type: "int"},
+        {name: "commentCount",  type: "int"},
         {name: "createTimeStr", type: "string"}
     ]
 });
@@ -183,6 +185,8 @@ Ext.onReady(function(){
             {text: "序号", width: 50, align: "center", xtype: "rownumberer"},
             {text: "文章标题", flex: 2, align: "center", dataIndex: "title"},
             {text: "类别名称", flex: 1, align: "center", dataIndex: "categoryName"},
+            {text: "阅读次数", flex: 1, align: "center", dataIndex: "readCount"},
+            {text: "评论次数", flex: 1, align: "center", dataIndex: "commentCount"},
             {text: "创建时间", flex: 2, align: "center", dataIndex: "createTimeStr"}
         ],
         tbar: new Ext.Toolbar({

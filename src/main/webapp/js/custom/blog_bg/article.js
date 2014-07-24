@@ -108,6 +108,9 @@ Ext.onReady(function(){
 		} else if (!categoryId.isValid()) {
 			message.error(categoryId.invalidText);
 		} else {
+			var tags = form.findField("tags");
+			tags.setValue(Ext.Array.unique(tags.getValue().replace(/，+/g, ",").split(",")).toString());
+			
 			var url;
 			if (form.findField("id").getValue()) {
 				url = basePath + "resource/article/updateArticle";
@@ -138,7 +141,8 @@ Ext.onReady(function(){
 	function editArticle(){
 		if (index.articleId) {
 			$.post(basePath + "resource/article/getArticle", {
-				id: index.articleId
+				id: index.articleId,
+				foreOrBack: 1
 			}, function(data){
 				delete index.articleId;
 				if (data) {

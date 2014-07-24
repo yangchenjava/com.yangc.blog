@@ -29,8 +29,8 @@
 
 	<sql name="blog.article.getArticleById" desc="根据id获取文章">
 	<![CDATA[
-		SELECT a.ID, a.title, a.content, a.category_id, b.category_name, c.tags, a.create_time
-		  FROM (SELECT ID, title, content, category_id, TO_CHAR (create_time, 'yyyy-mm-dd hh24:mi') create_time
+		SELECT a.ID, a.title, a.content, a.category_id, b.category_name, c.tags, a.create_time, a.read_count, NVL (d.comment_count, 0) comment_count
+		  FROM (SELECT ID, title, content, category_id, read_count, TO_CHAR (create_time, 'yyyy-mm-dd hh24:mi') create_time
 		          FROM t_blog_article
 		         WHERE ID = :articleId) a
 		       JOIN
@@ -40,19 +40,44 @@
 		            FROM t_blog_tag
 		           WHERE article_id = :articleId
 		        GROUP BY article_id) c ON c.article_id = a.ID
+		       LEFT JOIN
+		       (SELECT   COUNT (1) comment_count, article_id
+		            FROM t_blog_comment
+		           WHERE article_id = :articleId
+		        GROUP BY article_id) d ON d.article_id = a.ID
 	]]>
 	</sql>
 
 	<sql name="blog.article.getArticleListBycategoryId_page" desc="根据类别id获取文章">
 	<![CDATA[
-		SELECT   a.ID, a.title, b.category_name,
-		         TO_CHAR (a.create_time, 'yyyy-mm-dd hh24:mi') create_time
+		SELECT   a.ID, a.title, b.category_name, a.read_count, NVL (c.comment_count, 0) comment_count, TO_CHAR (a.create_time, 'yyyy-mm-dd hh24:mi') create_time
 		    FROM t_blog_article a
 		         JOIN
 		         (SELECT     ID, category_name
 		                FROM t_blog_category
 		          START WITH ID = :categoryId
 		          CONNECT BY PRIOR ID = parent_category_id) b ON b.ID = a.category_id
+		         LEFT JOIN
+		         (SELECT   COUNT (1) comment_count, article_id
+		              FROM t_blog_comment
+		          GROUP BY article_id) c ON c.article_id = a.ID
+		ORDER BY a.ID DESC
+	]]>
+	</sql>
+
+	<sql name="blog.article.getArticleList_page" desc="获取文章列表">
+	<![CDATA[
+		SELECT   a.ID, a.title, a.content, b.tags, TO_CHAR (a.create_time, 'yyyy-mm-dd hh24:mi') create_time, a.read_count, NVL (c.comment_count, 0) comment_count
+		    FROM t_blog_article a
+		         LEFT JOIN
+		         (SELECT   wmsys.wm_concat (tag_name) tags, article_id
+		              FROM t_blog_tag
+		          GROUP BY article_id) b ON b.article_id = a.ID
+		         LEFT JOIN
+		         (SELECT   COUNT (1) comment_count, article_id
+		              FROM t_blog_comment
+		          GROUP BY article_id) c ON c.article_id = a.ID
+		   ${condition}
 		ORDER BY a.ID DESC
 	]]>
 	</sql>

@@ -28,6 +28,11 @@
 				<comment>类别ID</comment>
 			</column>
 		</property>
+		<property name="readCount" type="java.lang.Long">
+			<column name="READ_COUNT" precision="22" scale="0">
+				<comment>阅读次数</comment>
+			</column>
+		</property>
 		<property name="createUser" type="java.lang.Long">
 			<column name="CREATE_USER" precision="22" scale="0">
 				<comment>创建者</comment>

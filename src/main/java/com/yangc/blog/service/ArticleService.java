@@ -10,10 +10,14 @@ public interface ArticleService {
 
 	public void delArticle(Long articleId);
 
-	public TBlogArticle getArticleById(Long articleId);
+	public TBlogArticle getArticleById(Long articleId, int foreOrBack);
 
 	public List<TBlogArticle> getArticleListBycategoryId_page(Long categoryId);
 
 	public Long getArticleListBycategoryId_count(Long categoryId);
+
+	public List<TBlogArticle> getArticleListByReadCount();
+
+	public List<TBlogArticle> getArticleList_page(String title, Long categoryId, String tag);
 
 }

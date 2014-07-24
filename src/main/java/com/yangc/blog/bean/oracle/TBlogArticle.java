@@ -9,9 +9,20 @@ public class TBlogArticle extends BaseBean {
 	private String title;
 	private String content;
 	private Long categoryId;
+	private Long readCount;
 
 	private String categoryName;
 	private String tags;
+	private Long commentCount;
+
+	public TBlogArticle() {
+	}
+
+	public TBlogArticle(Long id, String title, Long readCount) {
+		this.setId(id);
+		this.title = title;
+		this.readCount = readCount;
+	}
 
 	public String getTitle() {
 		return title;
@@ -37,6 +48,14 @@ public class TBlogArticle extends BaseBean {
 		this.categoryId = categoryId;
 	}
 
+	public Long getReadCount() {
+		return readCount;
+	}
+
+	public void setReadCount(Long readCount) {
+		this.readCount = readCount;
+	}
+
 	public String getCategoryName() {
 		return categoryName;
 	}
@@ -51,6 +70,14 @@ public class TBlogArticle extends BaseBean {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public Long getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(Long commentCount) {
+		this.commentCount = commentCount;
 	}
 
 }

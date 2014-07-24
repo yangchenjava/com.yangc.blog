@@ -9,6 +9,8 @@ public class TBlogTag extends BaseBean {
 	private String tagName;
 	private Long articleId;
 
+	private Long articleCount;
+
 	public String getTagName() {
 		return tagName;
 	}
@@ -23,6 +25,14 @@ public class TBlogTag extends BaseBean {
 
 	public void setArticleId(Long articleId) {
 		this.articleId = articleId;
+	}
+
+	public Long getArticleCount() {
+		return articleCount;
+	}
+
+	public void setArticleCount(Long articleCount) {
+		this.articleCount = articleCount;
 	}
 
 }
