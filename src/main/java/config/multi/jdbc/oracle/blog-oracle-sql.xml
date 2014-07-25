@@ -24,6 +24,7 @@
 		      FROM t_blog_category
 		START WITH parent_category_id = 0
 		CONNECT BY PRIOR ID = parent_category_id
+		  ORDER BY parent_category_id, serial_num
 	]]>
 	</sql>
 
@@ -85,15 +86,6 @@
 	<sql name="blog.tag.addTags" desc="添加标签">
 	<![CDATA[
 		INSERT INTO t_blog_tag (ID, tag_name, article_id) VALUES (hibernate_seq.NEXTVAL, ?, ?)
-	]]>
-	</sql>
-
-	<sql name="blog.comment.getCommentListByArticleId" desc="根据文章id获取评论">
-	<![CDATA[
-		SELECT   ID, NAME, content, ip_address, TO_CHAR (create_time, 'yyyy-mm-dd hh24:mi') create_time
-		    FROM t_blog_comment
-		   WHERE article_id = :articleId
-		ORDER BY ID DESC
 	]]>
 	</sql>
 

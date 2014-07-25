@@ -40,6 +40,9 @@ Ext.onReady(function(){
         collapsible: false,
         multiSelect: false,
         scroll: false,
+        selModel: Ext.create("Ext.selection.CheckboxModel", {
+        	mode: "SIMPLE"
+        }),
         viewConfig: {
             stripeRows: true,
             enableTextSelection: true
@@ -135,9 +138,13 @@ Ext.onReady(function(){
 	function deleteComment(){
 		if (grid_comment.getSelectionModel().hasSelection()) {
 			message.confirm("是否删除记录？", function(){
-				var record = grid_comment.getSelectionModel().getSelection()[0];
-				$.post(basePath + "resource/comment/delComment", {
-					id: record.get("id")
+				var records = grid_comment.getSelectionModel().getSelection(), commentIds = [];
+				for (var i = 0; i < records.length; i++) {
+					commentIds.push(records[i].get("id"));
+				}
+				
+				$.post(basePath + "resource/comment/delComments", {
+					commentIds: commentIds.toString()
 				}, function(data){
 					if (data.success) {
 						message.info(data.message);

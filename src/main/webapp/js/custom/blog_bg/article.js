@@ -141,8 +141,7 @@ Ext.onReady(function(){
 	function editArticle(){
 		if (index.articleId) {
 			$.post(basePath + "resource/article/getArticle", {
-				id: index.articleId,
-				foreOrBack: 1
+				id: index.articleId
 			}, function(data){
 				delete index.articleId;
 				if (data) {

@@ -17,4 +17,6 @@ public interface CategoryService {
 
 	public List<TBlogCategory> getCategoryListSameLevel();
 
+	public List<TBlogCategory> getCategoryListDiffLevel();
+
 }

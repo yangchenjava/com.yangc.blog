@@ -1,7 +1,6 @@
 package com.yangc.blog.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +13,10 @@ import com.yangc.blog.bean.oracle.TBlogComment;
 import com.yangc.blog.service.CommentService;
 import com.yangc.dao.BaseDao;
 import com.yangc.dao.JdbcDao;
+import com.yangc.utils.BeanUtils;
 
 @Service
+@SuppressWarnings("unchecked")
 public class CommentServiceImpl implements CommentService {
 
 	@Autowired
@@ -50,23 +51,8 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public List<TBlogComment> getCommentListByArticleId(Long articleId) {
-		String sql = JdbcDao.SQL_MAPPING.get("blog.comment.getCommentListByArticleId");
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("articleId", articleId);
-		List<Map<String, Object>> mapList = this.jdbcDao.findAll(sql, paramMap);
-		if (mapList == null || mapList.isEmpty()) return null;
-
-		List<TBlogComment> commentList = new ArrayList<TBlogComment>();
-		for (Map<String, Object> map : mapList) {
-			TBlogComment comment = new TBlogComment();
-			comment.setId(MapUtils.getLong(map, "ID"));
-			comment.setName(MapUtils.getString(map, "NAME"));
-			comment.setContent(MapUtils.getString(map, "CONTENT"));
-			comment.setIpAddress(MapUtils.getString(map, "IP_ADDRESS"));
-			comment.setCreateTimeStr(MapUtils.getString(map, "CREATE_TIME"));
-			commentList.add(comment);
-		}
-		return commentList;
+		List<TBlogComment> commentList = this.baseDao.findAll("from TBlogComment where articleId = ? order by id desc", new Object[] { articleId });
+		return BeanUtils.fillingTime(commentList);
 	}
 
 	@Override

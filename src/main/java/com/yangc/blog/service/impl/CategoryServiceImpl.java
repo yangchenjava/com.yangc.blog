@@ -2,8 +2,10 @@ package com.yangc.blog.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,11 +68,11 @@ public class CategoryServiceImpl implements CategoryService {
 		List<CategoryTree> categoryTreeList = new ArrayList<CategoryTree>();
 		for (Map<String, Object> map : mapList) {
 			CategoryTree categoryTree = new CategoryTree();
+			categoryTree.setLeaf(MapUtils.getLongValue(map, "TOTALCOUNT") == 0);
 			categoryTree.setCategoryId(MapUtils.getLong(map, "ID"));
 			categoryTree.setCategoryName(MapUtils.getString(map, "CATEGORY_NAME"));
 			categoryTree.setSerialNum(MapUtils.getLong(map, "SERIAL_NUM"));
 			categoryTree.setParentCategoryId(parentCategoryId);
-			categoryTree.setLeaf(MapUtils.getLongValue(map, "TOTALCOUNT") == 0);
 			categoryTreeList.add(categoryTree);
 		}
 		return categoryTreeList;
@@ -89,6 +91,46 @@ public class CategoryServiceImpl implements CategoryService {
 			category.setCategoryName(MapUtils.getString(map, "CATEGORY_NAME"));
 			category.setParentCategoryId(MapUtils.getLong(map, "PARENT_CATEGORY_ID"));
 			categoryList.add(category);
+		}
+		return categoryList;
+	}
+
+	@Override
+	public List<TBlogCategory> getCategoryListDiffLevel() {
+		String sql = JdbcDao.SQL_MAPPING.get("blog.category.getCategoryList");
+		List<Map<String, Object>> mapList = this.jdbcDao.findAll(sql, null);
+		if (mapList == null || mapList.isEmpty()) return null;
+
+		Map<Long, TBlogCategory> tempMap = new LinkedHashMap<Long, TBlogCategory>();
+		for (Map<String, Object> map : mapList) {
+			Long id = MapUtils.getLong(map, "ID");
+			String categoryName = MapUtils.getString(map, "category_name");
+			Long pid = MapUtils.getLong(map, "parent_category_id");
+
+			if (pid == 0) {
+				TBlogCategory category = new TBlogCategory();
+				category.setId(id);
+				category.setCategoryName(categoryName);
+				category.setParentCategoryId(pid);
+				category.setChildRenCategory(new ArrayList<TBlogCategory>());
+				tempMap.put(id, category);
+			} else {
+				TBlogCategory parentCategory = tempMap.get(pid);
+				if (parentCategory == null) continue;
+				TBlogCategory category = new TBlogCategory();
+				category.setId(id);
+				category.setCategoryName(categoryName);
+				category.setParentCategoryId(pid);
+
+				List<TBlogCategory> childRenCategory = parentCategory.getChildRenCategory();
+				childRenCategory.add(category);
+				parentCategory.setChildRenCategory(childRenCategory);
+			}
+		}
+
+		List<TBlogCategory> categoryList = new ArrayList<TBlogCategory>();
+		for (Entry<Long, TBlogCategory> entry : tempMap.entrySet()) {
+			categoryList.add(entry.getValue());
 		}
 		return categoryList;
 	}
