@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yangc.blog.bean.oracle.TBlogArticle;
+import com.yangc.blog.bean.oracle.TBlogAttr;
 import com.yangc.blog.bean.oracle.TBlogCategory;
+import com.yangc.blog.bean.oracle.TBlogComment;
 import com.yangc.blog.bean.oracle.TBlogTag;
 import com.yangc.blog.service.ArticleService;
 import com.yangc.blog.service.AttrService;
@@ -33,7 +35,7 @@ public class BlogResource {
 	@Autowired
 	private TagService tagService;
 	@Autowired
-	private CommentService commendService;
+	private CommentService commentService;
 
 	@RequestMapping(value = "getCategoryList", method = RequestMethod.POST)
 	@ResponseBody
@@ -63,11 +65,25 @@ public class BlogResource {
 		return this.articleService.getArticleById(id, 0);
 	}
 
+	@RequestMapping(value = "getAttrList", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TBlogAttr> getAttrList() {
+		logger.info("getAttrList");
+		return this.attrService.getAttrList();
+	}
+
 	@RequestMapping(value = "getTags", method = RequestMethod.POST)
 	@ResponseBody
 	public List<TBlogTag> getTags() {
 		logger.info("getTags");
 		return this.tagService.getTags();
+	}
+
+	@RequestMapping(value = "getCommentList", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TBlogComment> getCommentList(Long articleId) {
+		logger.info("getCommentList");
+		return this.commentService.getCommentListByArticleId(articleId);
 	}
 
 }
