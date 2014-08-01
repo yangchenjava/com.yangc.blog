@@ -1,0 +1,43 @@
+﻿.post_item {
+	margin-bottom: 30px;
+}
+
+.post_item_title {
+	font-size: 28px;
+}
+
+.post_item_title a {
+	text-decoration: none;
+}
+
+.post_item_content {
+	margin-bottom: 8px;
+}
+
+.post_item_meta {
+	margin-bottom: 5px;
+	color: #999;
+}
+
+.pagination ul>li>a {
+	border: 1px solid #ddd;
+	border-left-width: 0;
+	background-color: #fff;
+	color: #18bc9c;
+}
+
+.pagination ul>li>a:hover,.pagination ul>li>a:focus {
+	background-color: #f5f5f5;
+}
+
+.pagination ul>.active>a,.pagination ul>.active>a:hover,.pagination ul>.active>a:focus {
+	background-color: #f5f5f5;
+	color: #999;
+	cursor: default;
+}
+
+.pagination ul>.disabled>a,.pagination ul>.disabled>a:hover,.pagination ul>.disabled>a:focus {
+	background-color: transparent;
+	color: #999;
+	cursor: default;
+}

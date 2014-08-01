@@ -1,0 +1,26 @@
+﻿.post_item {
+	margin-bottom: 30px;
+}
+
+.post_item_title {
+	font-size: 28px;
+}
+
+.post_item_content {
+	margin-bottom: 8px;
+}
+
+.post_item_meta {
+	margin-bottom: 5px;
+	color: #999;
+}
+
+.post_item_tags {
+	margin-bottom: 5px;
+}
+
+.label {
+	margin-left: 3px;
+	padding: 3px 6px;
+	font-size: 12px;
+}
