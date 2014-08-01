@@ -44,6 +44,9 @@
 						<overlay>
 							<groupId>com.yangc</groupId>
 							<artifactId>com.yangc.platform</artifactId>
+							<excludes>
+								<exclude>WEB-INF/web.xml</exclude>
+							</excludes>
 						</overlay>
 					</overlays>
 				</configuration>

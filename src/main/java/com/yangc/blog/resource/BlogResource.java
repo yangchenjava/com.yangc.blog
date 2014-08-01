@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yangc.bean.DataGridBean;
 import com.yangc.blog.bean.oracle.TBlogArticle;
 import com.yangc.blog.bean.oracle.TBlogAttr;
 import com.yangc.blog.bean.oracle.TBlogCategory;
@@ -46,9 +47,10 @@ public class BlogResource {
 
 	@RequestMapping(value = "getArticleList_page", method = RequestMethod.POST)
 	@ResponseBody
-	public List<TBlogArticle> getArticleList_page(String title, Long categoryId, String tag) {
+	public DataGridBean getArticleList_page(String title, Long categoryId, String tag) {
 		logger.info("getArticleList_page");
-		return this.articleService.getArticleList_page(title, categoryId, tag);
+		List<TBlogArticle> articleList = this.articleService.getArticleList_page(title, categoryId, tag);
+		return new DataGridBean(articleList);
 	}
 
 	@RequestMapping(value = "getArticleListByReadCount", method = RequestMethod.POST)

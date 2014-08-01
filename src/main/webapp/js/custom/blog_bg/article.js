@@ -58,7 +58,7 @@ Ext.onReady(function(){
                     {name: "title", xtype: "textfield", fieldLabel: "文章标题", allowBlank: false, invalidText: "请输入文章标题！", vtype: "basic_chinese"}
 	            ]},
 				{xtype: "container", width: 300, layout: "anchor", items: [
-	                {name: "categoryId", xtype: "combobox", fieldLabel: "文章类别", allowBlank: false, invalidText: "请选择文章类别！", store: store_categoryList, forceSelection: true, editable: false, valueField: "id", displayField: "categoryName"}
+	                {name: "categoryId", xtype: "combobox", fieldLabel: "文章类别", allowBlank: false, invalidText: "请选择文章类别！", store: store_categoryList, forceSelection: true, editable: false, queryMode: "local", valueField: "id", displayField: "categoryName"}
 	            ]}
             ]},
             {xtype: "container", layout:"column", margin: "0 0 5 0", items: [

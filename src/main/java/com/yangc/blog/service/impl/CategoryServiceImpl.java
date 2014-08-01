@@ -104,8 +104,8 @@ public class CategoryServiceImpl implements CategoryService {
 		Map<Long, TBlogCategory> tempMap = new LinkedHashMap<Long, TBlogCategory>();
 		for (Map<String, Object> map : mapList) {
 			Long id = MapUtils.getLong(map, "ID");
-			String categoryName = MapUtils.getString(map, "category_name");
-			Long pid = MapUtils.getLong(map, "parent_category_id");
+			String categoryName = MapUtils.getString(map, "CATEGORY_NAME");
+			Long pid = MapUtils.getLong(map, "PARENT_CATEGORY_ID");
 
 			if (pid == 0) {
 				TBlogCategory category = new TBlogCategory();

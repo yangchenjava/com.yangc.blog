@@ -40,7 +40,7 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	public List<TBlogTag> getTags() {
-		List<Object[]> list = this.baseDao.findAll("select tagName, count(1) from TBlogTag group by tagName", null);
+		List<Object[]> list = this.baseDao.findAll("select tagName, count(tagName) from TBlogTag group by tagName", null);
 		if (list == null || list.isEmpty()) return null;
 
 		List<TBlogTag> tags = new ArrayList<TBlogTag>();

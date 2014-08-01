@@ -39,6 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
 		TBlogArticle article = (TBlogArticle) this.baseDao.get(TBlogArticle.class, articleId);
 		if (article == null) {
 			article = new TBlogArticle();
+			article.setReadCount(0L);
 		} else {
 			this.tagService.delTagsByArticleId(articleId);
 		}
