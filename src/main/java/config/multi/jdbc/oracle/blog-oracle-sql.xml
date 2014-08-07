@@ -30,7 +30,7 @@
 
 	<sql name="blog.article.getArticleById" desc="根据id获取文章">
 	<![CDATA[
-		SELECT a.ID, a.title, a.content, a.category_id, b.category_name, c.tags, a.create_time, a.read_count, NVL (d.comment_count, 0) comment_count
+		SELECT a.ID, a.title, a.content, a.category_id, b.category_name, c.tags, a.create_time, a.read_count, NVL (d.comment_count, 0) comment_count, e.prev_id, e.prev_title, e.next_id, e.next_title
 		  FROM (SELECT ID, title, content, category_id, read_count, TO_CHAR (create_time, 'yyyy-mm-dd hh24:mi') create_time
 		          FROM t_blog_article
 		         WHERE ID = :articleId) a
@@ -46,6 +46,11 @@
 		            FROM t_blog_comment
 		           WHERE article_id = :articleId
 		        GROUP BY article_id) d ON d.article_id = a.ID
+		       LEFT JOIN
+		       (SELECT *
+		          FROM (SELECT ID, LAG (ID, 1) OVER (ORDER BY ID) prev_id, LAG (title, 1) OVER (ORDER BY ID) prev_title, LEAD (ID, 1) OVER (ORDER BY ID) next_id, LEAD (title, 1) OVER (ORDER BY ID) next_title
+		                  FROM t_blog_article)
+		         WHERE ID = :articleId) e ON e.ID = a.ID
 	]]>
 	</sql>
 

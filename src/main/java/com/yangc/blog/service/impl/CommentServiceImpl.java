@@ -51,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public List<TBlogComment> getCommentListByArticleId(Long articleId) {
-		List<TBlogComment> commentList = this.baseDao.findAll("from TBlogComment where articleId = ? order by id desc", new Object[] { articleId });
+		List<TBlogComment> commentList = this.baseDao.findAll("from TBlogComment where articleId = ? order by id", new Object[] { articleId });
 		return BeanUtils.fillingTime(commentList);
 	}
 

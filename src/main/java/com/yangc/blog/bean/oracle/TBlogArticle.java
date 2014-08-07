@@ -15,6 +15,11 @@ public class TBlogArticle extends BaseBean {
 	private String tags;
 	private Long commentCount;
 
+	private Long prevId;
+	private String prevTitle;
+	private Long nextId;
+	private String nextTitle;
+
 	public TBlogArticle() {
 	}
 
@@ -78,6 +83,38 @@ public class TBlogArticle extends BaseBean {
 
 	public void setCommentCount(Long commentCount) {
 		this.commentCount = commentCount;
+	}
+
+	public Long getPrevId() {
+		return prevId;
+	}
+
+	public void setPrevId(Long prevId) {
+		this.prevId = prevId;
+	}
+
+	public String getPrevTitle() {
+		return prevTitle;
+	}
+
+	public void setPrevTitle(String prevTitle) {
+		this.prevTitle = prevTitle;
+	}
+
+	public Long getNextId() {
+		return nextId;
+	}
+
+	public void setNextId(Long nextId) {
+		this.nextId = nextId;
+	}
+
+	public String getNextTitle() {
+		return nextTitle;
+	}
+
+	public void setNextTitle(String nextTitle) {
+		this.nextTitle = nextTitle;
 	}
 
 }

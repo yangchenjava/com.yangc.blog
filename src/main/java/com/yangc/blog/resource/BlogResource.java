@@ -2,6 +2,8 @@ package com.yangc.blog.resource;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yangc.bean.DataGridBean;
+import com.yangc.bean.ResultBean;
 import com.yangc.blog.bean.oracle.TBlogArticle;
 import com.yangc.blog.bean.oracle.TBlogAttr;
 import com.yangc.blog.bean.oracle.TBlogCategory;
@@ -20,6 +23,8 @@ import com.yangc.blog.service.AttrService;
 import com.yangc.blog.service.CategoryService;
 import com.yangc.blog.service.CommentService;
 import com.yangc.blog.service.TagService;
+import com.yangc.exception.WebApplicationException;
+import com.yangc.utils.net.IpUtils;
 
 @Controller
 @RequestMapping("/blog")
@@ -79,6 +84,19 @@ public class BlogResource {
 	public List<TBlogTag> getTags() {
 		logger.info("getTags");
 		return this.tagService.getTags();
+	}
+
+	@RequestMapping(value = "addOrUpdateComment", method = RequestMethod.POST)
+	@ResponseBody
+	public ResultBean addOrUpdateComment(String name, String content, Long articleId, HttpServletRequest request) {
+		logger.info("addOrUpdateComment");
+		try {
+			this.commentService.addOrUpdateComment(null, name, content, articleId, IpUtils.getIpAddress(request));
+			return new ResultBean(true, "添加成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return WebApplicationException.build();
+		}
 	}
 
 	@RequestMapping(value = "getCommentList", method = RequestMethod.POST)

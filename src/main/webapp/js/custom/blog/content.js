@@ -94,6 +94,8 @@ $(function(){
 				postList += "<div class='post_item'>";
 				postList += "<h2 class='post_item_title'>" + data.title + "</a></h2>";
 				postList += "<div class='post_item_content'>" + data.content + "</div>";
+				if (data.prevId) postList += "<p class='post_item_prev_next'>« 上一篇：<a href='../blog/content.html?id=" + data.prevId + "'>" + data.prevTitle + "</a></p>";
+				if (data.nextId) postList += "<p class='post_item_prev_next'>» 下一篇：<a href='../blog/content.html?id=" + data.nextId + "'>" + data.nextTitle + "</a></p>";
 				postList += "<p class='text-right post_item_meta'>posted @ " + data.createTimeStr + " 阅读(" + data.readCount + ") 评论(" + data.commentCount + ")</p>";
 				postList += "<p class='text-right post_item_tags'>";
 				if (data.tags) {
@@ -111,5 +113,99 @@ $(function(){
 			}
 			$("#post_list").html(postList);
 		});
+		
+		showComment(articleId[2]);
 	}
+	
+	$(".close").click(function(){
+		$(".alert").hide();
+	});
+	
+	$("#comment_button").click(function(){
+		var commentName = $.trim($("#comment_name").val());
+		var commentContent = $.trim($("#comment_content").val());
+		if (commentName == "" || /<([^>]*)>/.test(commentName)) {
+			showAlert("请输入您的姓名（昵称）！");
+		} else if (commentContent == "" || /<([^>]*)>/.test(commentContent)) {
+			showAlert("请输入您的评论内容！");
+		} else {
+			$.post("../resource/blog/addOrUpdateComment", {
+				name: commentName,
+				content: commentContent,
+				articleId: articleId[2]
+			}, function(data){
+				if (data.success) {
+					$("#comment_name").val("");
+					$("#comment_content").val("");
+					showComment(articleId[2]);
+				} else {
+					showAlert("评论失败，服务器异常");
+				}
+			});
+		}
+	});
+	
+	// 动态加载SyntaxHighlighter
+	SyntaxHighlighter.autoloader.apply(null, path(
+	"applescript            @shBrushAppleScript.js",
+	"actionscript3 as3      @shBrushAS3.js",
+	"bash shell             @shBrushBash.js",
+	"coldfusion cf          @shBrushColdFusion.js",
+	"cpp c                  @shBrushCpp.js",
+	"c# c-sharp csharp      @shBrushCSharp.js",
+	"css                    @shBrushCss.js",
+	"delphi pascal          @shBrushDelphi.js",
+	"diff patch pas         @shBrushDiff.js",
+	"erl erlang             @shBrushErlang.js",
+	"groovy                 @shBrushGroovy.js",
+	"java                   @shBrushJava.js",
+	"jfx javafx             @shBrushJavaFX.js",
+	"js jscript javascript  @shBrushJScript.js",
+	"perl pl                @shBrushPerl.js",
+	"php                    @shBrushPhp.js",
+	"text plain             @shBrushPlain.js",
+	"ps powershell          @shBrushPowerShell.js",
+	"py python              @shBrushPython.js",
+	"ruby rails ror rb      @shBrushRuby.js",
+	"sass scss              @shBrushSass.js",
+	"scala                  @shBrushScala.js",
+	"sql                    @shBrushSql.js",
+	"vb vbnet               @shBrushVb.js",
+	"xml xhtml xslt html    @shBrushXml.js"
+	));
+	SyntaxHighlighter.all();
 });
+
+function path(){
+	var args = arguments, result = [];
+	for (var i = 0; i < args.length; i++) {
+		result.push(args[i].replace("@", "../js/lib/SyntaxHighlighter/"));
+	}
+	return result;
+}
+
+function showComment(articleId){
+	$.post("../resource/blog/getCommentList", {
+		articleId: articleId
+	}, function(data){
+		var commentList = "";
+		if (data && data.length > 0) {
+			commentList += "<h3 class='comment_title'>评论列表</h3>";
+			for (var i = 0; i < data.length; i++) {
+				commentList += "<div class='comment_item'>";
+				commentList += "<p class='comment_name'>#" + (i + 1) + "楼<span class='comment_time'>" + data[i].createTimeStr + "</span>" + data[i].name + "</p>";
+				commentList += "<p class='comment_content'>" + data[i].content + "</p>";
+				commentList += "</div>";
+			}
+		}
+		$("#comment_list").html(commentList);
+	});
+}
+
+function showAlert(content){
+	$(".alert span").html(content);
+	$(".alert").show();
+	window.setTimeout(function(){
+		$(".alert").hide("normal");
+	}, 4000);
+}

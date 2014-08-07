@@ -81,6 +81,10 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setCreateTimeStr(MapUtils.getString(map, "CREATE_TIME"));
 		article.setReadCount(MapUtils.getLong(map, "READ_COUNT"));
 		article.setCommentCount(MapUtils.getLong(map, "COMMENT_COUNT"));
+		article.setPrevId(MapUtils.getLong(map, "PREV_ID"));
+		article.setPrevTitle(MapUtils.getString(map, "PREV_TITLE"));
+		article.setNextId(MapUtils.getLong(map, "NEXT_ID"));
+		article.setNextTitle(MapUtils.getString(map, "NEXT_TITLE"));
 		return article;
 	}
 

@@ -21,6 +21,11 @@ a {
 	color: #555;
 }
 
+a:hover,a:focus {
+	color: #18bc9c;
+	text-decoration: none;
+}
+
 td {
 	padding: 8px 20px !important;
 }
@@ -39,8 +44,12 @@ td {
 	font-size: 15px;
 }
 
+.input-append,.input-prepend {
+	margin-bottom: 18px;
+}
+
 #search_text {
-	width: 190px;
+	width: 198px;
 	border: 1px solid !important;
 	border-color: #ddd !important;
 }
@@ -49,8 +58,20 @@ td {
 	border-color: #18bc9c !important;
 }
 
-#search_button {
-	padding: 8px 20px !important;
+select,textarea,input[type="text"],input[type="password"],input[type="datetime"],input[type="datetime-local"],input[type="date"],input[type="month"],input[type="time"],input[type="week"],input[type="number"],input[type="email"],input[type="url"],input[type="search"],input[type="tel"],input[type="color"],.uneditable-input {
+	color: #333;
+}
+
+.btn {
+	padding: 8px 16px;
+}
+
+#tags,#read,#link {
+	font-size: 14px;
+}
+
+.success {
+	font-size: 15px;
 }
 
 .copyright {
