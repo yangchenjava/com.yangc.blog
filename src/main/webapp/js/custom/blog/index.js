@@ -1,10 +1,9 @@
 var title, categoryId, tag;
 
 $(function(){
-	var params = window.location.search.substr(1);
-	title = params.match(new RegExp("(^|&)title=([^&]*)(&|$)"));
-	categoryId = params.match(new RegExp("(^|&)categoryId=([^&]*)(&|$)"));
-	tag = params.match(new RegExp("(^|&)tag=([^&]*)(&|$)"));
+	title = $.getQuery("title");
+	categoryId = $.getQuery("categoryId");
+	tag = $.getQuery("tag");
 
 	$(".brand").click(function(){
 		window.location.href = "../blog/index.html";
@@ -33,7 +32,7 @@ $(function(){
 		$(".dropdown-toggle").dropdownHover({delay: 200});
 		
 		if (categoryId) {
-			$(".nav_link[categoryId='" + categoryId[2] + "']").addClass("active");
+			$(".nav_link[categoryId='" + categoryId + "']").addClass("active");
 		} else {
 			$(".nav_link:first").addClass("active");
 		}
@@ -63,7 +62,7 @@ $(function(){
 	});
 	
 	if (title) {
-		$("#search_text").val(decodeURIComponent(title[2]));
+		$("#search_text").val(title);
 	}
 	$("#search_button").click(function(){
 		var searchText = $.trim($("#search_text").val());
@@ -98,6 +97,11 @@ $(function(){
 		read += "</table>";
 		$("#read").html(read);
 	});
+	
+	// 返回顶部
+	$.scrollUp({
+		scrollImg: true
+    });
 });
 
 var PAGE_SIZE = 10;
@@ -107,9 +111,9 @@ function showPostList(pageNow){
 		limit: PAGE_SIZE
 	};
 	if (title) {
-		formData.title = decodeURIComponent(title[2]);
+		formData.title = title;
 	} else if (tag) {
-		formData.tag = decodeURIComponent(tag[2]);
+		formData.tag = tag;
 	} else {
 		formData.categoryId = $(".nav .active").attr("categoryId");
 	}

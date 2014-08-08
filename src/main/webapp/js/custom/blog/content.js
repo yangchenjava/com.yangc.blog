@@ -1,6 +1,5 @@
 $(function(){
-	var params = window.location.search.substr(1);
-	var articleId = params.match(new RegExp("(^|&)id=([^&]*)(&|$)"));
+	var articleId = $.getQuery("id");
 	
 	$(".brand").click(function(){
 		window.location.href = "../blog/index.html";
@@ -87,7 +86,7 @@ $(function(){
 	
 	if (articleId) {
 		$.post("../resource/blog/getArticleById", {
-			id: articleId[2]
+			id: articleId
 		}, function(data){
 			var postList = "";
 			if (data) {
@@ -114,36 +113,41 @@ $(function(){
 			$("#post_list").html(postList);
 		});
 		
-		showComment(articleId[2]);
+		showComment(articleId);
+		
+		$(".close").click(function(){
+			$(".alert").hide();
+		});
+		
+		$("#comment_button").click(function(){
+			var commentName = $.trim($("#comment_name").val());
+			var commentContent = $.trim($("#comment_content").val());
+			if (commentName == "" || /<([^>]*)>/.test(commentName)) {
+				showAlert("请输入您的姓名（昵称）！");
+			} else if (commentContent == "" || /<([^>]*)>/.test(commentContent)) {
+				showAlert("请输入您的评论内容！");
+			} else {
+				$.post("../resource/blog/addOrUpdateComment", {
+					name: commentName,
+					content: commentContent,
+					articleId: articleId
+				}, function(data){
+					if (data.success) {
+						$("#comment_name").val("");
+						$("#comment_content").val("");
+						showComment(articleId);
+					} else {
+						showAlert("评论失败，服务器异常");
+					}
+				});
+			}
+		});
 	}
 	
-	$(".close").click(function(){
-		$(".alert").hide();
-	});
-	
-	$("#comment_button").click(function(){
-		var commentName = $.trim($("#comment_name").val());
-		var commentContent = $.trim($("#comment_content").val());
-		if (commentName == "" || /<([^>]*)>/.test(commentName)) {
-			showAlert("请输入您的姓名（昵称）！");
-		} else if (commentContent == "" || /<([^>]*)>/.test(commentContent)) {
-			showAlert("请输入您的评论内容！");
-		} else {
-			$.post("../resource/blog/addOrUpdateComment", {
-				name: commentName,
-				content: commentContent,
-				articleId: articleId[2]
-			}, function(data){
-				if (data.success) {
-					$("#comment_name").val("");
-					$("#comment_content").val("");
-					showComment(articleId[2]);
-				} else {
-					showAlert("评论失败，服务器异常");
-				}
-			});
-		}
-	});
+	// 返回顶部
+	$.scrollUp({
+        scrollImg: true
+    });
 	
 	// 动态加载SyntaxHighlighter
 	SyntaxHighlighter.autoloader.apply(null, path(
