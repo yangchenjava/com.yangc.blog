@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yangc.blog.bean.oracle.TBlogAttr;
+import com.yangc.blog.bean.TBlogAttr;
 import com.yangc.blog.service.AttrService;
 import com.yangc.dao.BaseDao;
 

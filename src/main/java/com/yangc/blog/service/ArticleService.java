@@ -2,7 +2,7 @@ package com.yangc.blog.service;
 
 import java.util.List;
 
-import com.yangc.blog.bean.oracle.TBlogArticle;
+import com.yangc.blog.bean.TBlogArticle;
 
 public interface ArticleService {
 

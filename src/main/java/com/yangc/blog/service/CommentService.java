@@ -2,7 +2,7 @@ package com.yangc.blog.service;
 
 import java.util.List;
 
-import com.yangc.blog.bean.oracle.TBlogComment;
+import com.yangc.blog.bean.TBlogComment;
 
 public interface CommentService {
 

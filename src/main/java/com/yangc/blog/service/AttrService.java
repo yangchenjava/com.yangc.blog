@@ -2,7 +2,7 @@ package com.yangc.blog.service;
 
 import java.util.List;
 
-import com.yangc.blog.bean.oracle.TBlogAttr;
+import com.yangc.blog.bean.TBlogAttr;
 
 public interface AttrService {
 

@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yangc.blog.bean.oracle.TBlogTag;
+import com.yangc.blog.bean.TBlogTag;
 import com.yangc.blog.service.TagService;
 import com.yangc.dao.BaseDao;
 import com.yangc.dao.JdbcDao;

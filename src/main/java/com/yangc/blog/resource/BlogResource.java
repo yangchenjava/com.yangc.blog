@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yangc.bean.DataGridBean;
 import com.yangc.bean.ResultBean;
-import com.yangc.blog.bean.oracle.TBlogArticle;
-import com.yangc.blog.bean.oracle.TBlogAttr;
-import com.yangc.blog.bean.oracle.TBlogCategory;
-import com.yangc.blog.bean.oracle.TBlogComment;
-import com.yangc.blog.bean.oracle.TBlogTag;
+import com.yangc.blog.bean.TBlogArticle;
+import com.yangc.blog.bean.TBlogAttr;
+import com.yangc.blog.bean.TBlogCategory;
+import com.yangc.blog.bean.TBlogComment;
+import com.yangc.blog.bean.TBlogTag;
 import com.yangc.blog.service.ArticleService;
 import com.yangc.blog.service.AttrService;
 import com.yangc.blog.service.CategoryService;

@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yangc.blog.bean.oracle.TBlogComment;
+import com.yangc.blog.bean.TBlogComment;
 import com.yangc.blog.service.CommentService;
 import com.yangc.dao.BaseDao;
 import com.yangc.dao.JdbcDao;

@@ -1,29 +1,24 @@
-package com.yangc.blog.bean.oracle;
+package com.yangc.blog.bean;
 
-import com.yangc.bean.AsyncTreeNode;
+import java.util.List;
 
-public class CategoryTree extends AsyncTreeNode {
+import com.yangc.bean.BaseBean;
 
-	private Long categoryId;
+public class TBlogCategory extends BaseBean {
+
+	private static final long serialVersionUID = -1260736314257794529L;
+
 	private String categoryName;
 	private Long parentCategoryId;
 	private Long serialNum;
 
-	public Long getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(Long categoryId) {
-		this.setId("" + categoryId);
-		this.categoryId = categoryId;
-	}
+	private List<TBlogCategory> childRenCategory;
 
 	public String getCategoryName() {
 		return categoryName;
 	}
 
 	public void setCategoryName(String categoryName) {
-		this.setText(categoryName);
 		this.categoryName = categoryName;
 	}
 
@@ -41,6 +36,14 @@ public class CategoryTree extends AsyncTreeNode {
 
 	public void setSerialNum(Long serialNum) {
 		this.serialNum = serialNum;
+	}
+
+	public List<TBlogCategory> getChildRenCategory() {
+		return childRenCategory;
+	}
+
+	public void setChildRenCategory(List<TBlogCategory> childRenCategory) {
+		this.childRenCategory = childRenCategory;
 	}
 
 }

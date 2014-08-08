@@ -2,8 +2,8 @@ package com.yangc.blog.service;
 
 import java.util.List;
 
-import com.yangc.blog.bean.oracle.CategoryTree;
-import com.yangc.blog.bean.oracle.TBlogCategory;
+import com.yangc.blog.bean.CategoryTree;
+import com.yangc.blog.bean.TBlogCategory;
 
 public interface CategoryService {
 

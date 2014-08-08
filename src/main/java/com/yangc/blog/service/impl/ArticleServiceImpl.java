@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yangc.blog.bean.oracle.TBlogArticle;
+import com.yangc.blog.bean.TBlogArticle;
 import com.yangc.blog.service.ArticleService;
 import com.yangc.blog.service.CommentService;
 import com.yangc.blog.service.TagService;

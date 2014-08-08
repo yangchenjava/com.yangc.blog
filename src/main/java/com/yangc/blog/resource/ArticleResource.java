@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yangc.bean.DataGridBean;
 import com.yangc.bean.ResultBean;
-import com.yangc.blog.bean.oracle.TBlogArticle;
+import com.yangc.blog.bean.TBlogArticle;
 import com.yangc.blog.service.ArticleService;
 import com.yangc.exception.WebApplicationException;
-import com.yangc.system.bean.oracle.Permission;
+import com.yangc.system.bean.Permission;
 
 @Controller
 @RequestMapping("/article")

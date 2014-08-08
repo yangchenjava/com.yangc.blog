@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yangc.bean.ResultBean;
-import com.yangc.blog.bean.oracle.TBlogAttr;
+import com.yangc.blog.bean.TBlogAttr;
 import com.yangc.blog.service.AttrService;
 import com.yangc.exception.WebApplicationException;
-import com.yangc.system.bean.oracle.Permission;
+import com.yangc.system.bean.Permission;
 
 @Controller
 @RequestMapping("/attr")

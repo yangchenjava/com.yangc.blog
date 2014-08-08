@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yangc.bean.ResultBean;
-import com.yangc.blog.bean.oracle.CategoryTree;
-import com.yangc.blog.bean.oracle.TBlogCategory;
+import com.yangc.blog.bean.CategoryTree;
+import com.yangc.blog.bean.TBlogCategory;
 import com.yangc.blog.service.CategoryService;
 import com.yangc.exception.WebApplicationException;
-import com.yangc.system.bean.oracle.Permission;
+import com.yangc.system.bean.Permission;
 
 @Controller
 @RequestMapping("/category")

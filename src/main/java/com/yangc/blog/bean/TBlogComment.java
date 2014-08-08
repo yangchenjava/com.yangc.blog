@@ -1,4 +1,4 @@
-package com.yangc.blog.bean.oracle;
+package com.yangc.blog.bean;
 
 import com.yangc.bean.BaseBean;
 
