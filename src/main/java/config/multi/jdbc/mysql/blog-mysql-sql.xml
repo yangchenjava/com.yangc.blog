@@ -1,7 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqlroot>
-	<sql name="" desc="">
+	<sql name="blog.category.getCategoryTreeListByParentCategoryId" desc="根据父id查询子类别">
 	<![CDATA[
+		SELECT   C.ID, C.CATEGORY_NAME, C.SERIAL_NUM, IFNULL(D.TOTALCOUNT, 0) TOTALCOUNT
+		FROM     T_BLOG_CATEGORY C
+		         LEFT JOIN (SELECT   B.ID, COUNT(1) TOTALCOUNT
+		                    FROM     T_BLOG_CATEGORY A
+		                             JOIN (SELECT ID
+		                                   FROM   T_BLOG_CATEGORY
+		                                   WHERE  PARENT_CATEGORY_ID = :parentCategoryId) B
+		                               ON B.ID = A.PARENT_CATEGORY_ID
+		                    GROUP BY B.ID) D
+		           ON D.ID = C.ID
+		WHERE    C.PARENT_CATEGORY_ID = :parentCategoryId
+		ORDER BY C.SERIAL_NUM
+	]]>
+	</sql>
+
+	<sql name="blog.category.getCategoryList" desc="获取所有类别">
+	<![CDATA[
+		SELECT   ID, CATEGORY_NAME, PARENT_CATEGORY_ID
+		FROM     T_BLOG_CATEGORY
+		WHERE    FIND_IN_SET(ID, START_WITH_PRIOR_CATEGORY(0)) AND ID <> 0
+		ORDER BY PARENT_CATEGORY_ID, SERIAL_NUM
+	]]>
+	</sql>
+
+	<sql name="blog.article.getArticleById" desc="根据id获取文章">
+	<![CDATA[
+		SELECT A.ID, A.TITLE, A.CONTENT, A.CATEGORY_ID, B.CATEGORY_NAME, C.TAGS, A.CREATE_TIME, A.READ_COUNT,
+		       IFNULL(D.COMMENT_COUNT, 0) COMMENT_COUNT, E.PREV_ID, E.PREV_TITLE, F.NEXT_ID, F.NEXT_TITLE
+		FROM   (SELECT ID, TITLE, CONTENT, CATEGORY_ID, READ_COUNT, DATE_FORMAT(CREATE_TIME, '%Y-%m-%d %H:%i') CREATE_TIME
+		        FROM   T_BLOG_ARTICLE
+		        WHERE  ID = :articleId) A
+		       JOIN T_BLOG_CATEGORY B ON B.ID = A.CATEGORY_ID
+		       LEFT JOIN (SELECT   GROUP_CONCAT(TAG_NAME) TAGS, ARTICLE_ID
+		                  FROM     T_BLOG_TAG
+		                  WHERE    ARTICLE_ID = :articleId
+		                  GROUP BY ARTICLE_ID) C
+		         ON C.ARTICLE_ID = A.ID
+		       LEFT JOIN (SELECT   COUNT(1) COMMENT_COUNT, ARTICLE_ID
+		                  FROM     T_BLOG_COMMENT
+		                  WHERE    ARTICLE_ID = :articleId
+		                  GROUP BY ARTICLE_ID) D
+		         ON D.ARTICLE_ID = A.ID
+		       LEFT JOIN (SELECT   :articleId ID, ID PREV_ID, TITLE PREV_TITLE
+		                  FROM     T_BLOG_ARTICLE
+		                  WHERE    ID < :articleId
+		                  ORDER BY ID DESC
+		                  LIMIT    0, 1) E
+		         ON E.ID = A.ID
+		       LEFT JOIN (SELECT   :articleId ID, ID NEXT_ID, TITLE NEXT_TITLE
+		                  FROM     T_BLOG_ARTICLE
+		                  WHERE    ID > :articleId
+		                  ORDER BY ID
+		                  LIMIT    0, 1) F
+		         ON F.ID = A.ID
+	]]>
+	</sql>
+
+	<sql name="blog.article.getArticleListBycategoryId_page" desc="根据类别id获取文章">
+	<![CDATA[
+		SELECT   A.ID, A.TITLE, B.CATEGORY_NAME, A.READ_COUNT, IFNULL(C.COMMENT_COUNT, 0) COMMENT_COUNT, DATE_FORMAT(A.CREATE_TIME, '%Y-%m-%d %H:%i') CREATE_TIME
+		FROM     T_BLOG_ARTICLE A
+		         JOIN (SELECT ID, CATEGORY_NAME
+		               FROM   T_BLOG_CATEGORY
+		               WHERE  FIND_IN_SET(ID, START_WITH_PRIOR_CATEGORY(:categoryId))) B
+		           ON B.ID = A.CATEGORY_ID
+		         LEFT JOIN (SELECT   COUNT(1) COMMENT_COUNT, ARTICLE_ID
+		                    FROM     T_BLOG_COMMENT
+		                    GROUP BY ARTICLE_ID) C
+		           ON C.ARTICLE_ID = A.ID
+		ORDER BY A.ID DESC
+	]]>
+	</sql>
+
+	<sql name="blog.article.getArticleList_page" desc="获取文章列表">
+	<![CDATA[
+		SELECT   A.ID, A.TITLE, A.CONTENT, B.TAGS, DATE_FORMAT(A.CREATE_TIME, '%Y-%m-%d %H:%i') CREATE_TIME, A.READ_COUNT, IFNULL(C.COMMENT_COUNT, 0) COMMENT_COUNT
+		FROM     T_BLOG_ARTICLE A
+		         LEFT JOIN (SELECT   GROUP_CONCAT(TAG_NAME) TAGS, ARTICLE_ID
+		                    FROM     T_BLOG_TAG
+		                    GROUP BY ARTICLE_ID) B
+		           ON B.ARTICLE_ID = A.ID
+		         LEFT JOIN (SELECT   COUNT(1) COMMENT_COUNT, ARTICLE_ID
+		                    FROM     T_BLOG_COMMENT
+		                    GROUP BY ARTICLE_ID) C
+		           ON C.ARTICLE_ID = A.ID
+		         ${condition}
+		ORDER BY A.ID DESC
+	]]>
+	</sql>
+
+	<sql name="blog.tag.addTags" desc="添加标签">
+	<![CDATA[
+		INSERT INTO T_BLOG_TAG (TAG_NAME, ARTICLE_ID) VALUES (?, ?)
+	]]>
+	</sql>
+
+	<sql name="blog.comment.getCommentList_page" desc="分页获取所有评论">
+	<![CDATA[
+		SELECT   A.ID, A.NAME, A.CONTENT, A.ARTICLE_ID, B.TITLE, A.IP_ADDRESS, DATE_FORMAT(A.CREATE_TIME, '%Y-%m-%d %H:%i') CREATE_TIME
+		FROM     T_BLOG_COMMENT A JOIN T_BLOG_ARTICLE B ON B.ID = A.ARTICLE_ID
+		ORDER BY A.ID DESC
 	]]>
 	</sql>
 </sqlroot>
