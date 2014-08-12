@@ -8,9 +8,11 @@ public interface ArticleService {
 
 	public void addOrUpdateArticle(Long articleId, String title, String content, Long categoryId, String tags);
 
+	public void updateArticleReadCount(Long articleId);
+
 	public void delArticle(Long articleId);
 
-	public TBlogArticle getArticleById(Long articleId, int foreOrBack);
+	public TBlogArticle getArticleById(Long articleId);
 
 	public List<TBlogArticle> getArticleListBycategoryId_page(Long categoryId);
 

@@ -51,6 +51,11 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public void updateArticleReadCount(Long articleId) {
+		this.baseDao.updateOrDelete("update TBlogArticle set readCount = readCount + 1 where id = ?", new Object[] { articleId });
+	}
+
+	@Override
 	public void delArticle(Long articleId) {
 		this.baseDao.updateOrDelete("delete TBlogArticle where id = ?", new Object[] { articleId });
 		this.tagService.delTagsByArticleId(articleId);
@@ -58,12 +63,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public TBlogArticle getArticleById(Long articleId, int foreOrBack) {
-		// 如果前台访问文章, 文章阅读次数加1
-		if (foreOrBack == 0) {
-			this.baseDao.updateOrDelete("update TBlogArticle set readCount = readCount + 1 where id = ?", new Object[] { articleId });
-		}
-
+	public TBlogArticle getArticleById(Long articleId) {
 		String sql = JdbcDao.SQL_MAPPING.get("blog.article.getArticleById");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("articleId", articleId);
@@ -81,10 +81,21 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setCreateTimeStr(MapUtils.getString(map, "CREATE_TIME"));
 		article.setReadCount(MapUtils.getLong(map, "READ_COUNT"));
 		article.setCommentCount(MapUtils.getLong(map, "COMMENT_COUNT"));
-		article.setPrevId(MapUtils.getLong(map, "PREV_ID"));
-		article.setPrevTitle(MapUtils.getString(map, "PREV_TITLE"));
-		article.setNextId(MapUtils.getLong(map, "NEXT_ID"));
-		article.setNextTitle(MapUtils.getString(map, "NEXT_TITLE"));
+
+		sql = JdbcDao.SQL_MAPPING.get("blog.article.getPrevNextArticleById");
+		mapList = this.jdbcDao.find(sql, paramMap);
+		if (mapList != null && !mapList.isEmpty()) {
+			for (Map<String, Object> m : mapList) {
+				long id = MapUtils.getLongValue(m, "ID");
+				if (id < articleId) {
+					article.setPrevId(id);
+					article.setPrevTitle(MapUtils.getString(m, "TITLE"));
+				} else {
+					article.setNextId(id);
+					article.setNextTitle(MapUtils.getString(m, "TITLE"));
+				}
+			}
+		}
 		return article;
 	}
 

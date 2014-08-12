@@ -41,7 +41,8 @@ Ext.onReady(function(){
         multiSelect: false,
         scroll: false,
         selModel: Ext.create("Ext.selection.CheckboxModel", {
-        	mode: "SIMPLE"
+//        	mode: "SIMPLE"
+        	mode: "MULTI"
         }),
         viewConfig: {
             stripeRows: true,

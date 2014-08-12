@@ -52,7 +52,7 @@ public class ArticleResource {
 	@RequiresPermissions("article:" + Permission.SEL)
 	public TBlogArticle getArticle(Long id) {
 		logger.info("getArticle - id=" + id);
-		return this.articleService.getArticleById(id, 1);
+		return this.articleService.getArticleById(id);
 	}
 
 	/**

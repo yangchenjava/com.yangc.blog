@@ -28,8 +28,7 @@
 
 	<sql name="blog.article.getArticleById" desc="根据id获取文章">
 	<![CDATA[
-		SELECT A.ID, A.TITLE, A.CONTENT, A.CATEGORY_ID, B.CATEGORY_NAME, C.TAGS, A.CREATE_TIME, A.READ_COUNT,
-		       IFNULL(D.COMMENT_COUNT, 0) COMMENT_COUNT, E.PREV_ID, E.PREV_TITLE, F.NEXT_ID, F.NEXT_TITLE
+		SELECT A.ID, A.TITLE, A.CONTENT, A.CATEGORY_ID, B.CATEGORY_NAME, C.TAGS, A.CREATE_TIME, A.READ_COUNT, IFNULL(D.COMMENT_COUNT, 0) COMMENT_COUNT
 		FROM   (SELECT ID, TITLE, CONTENT, CATEGORY_ID, READ_COUNT, DATE_FORMAT(CREATE_TIME, '%Y-%m-%d %H:%i') CREATE_TIME
 		        FROM   T_BLOG_ARTICLE
 		        WHERE  ID = :articleId) A
@@ -44,18 +43,14 @@
 		                  WHERE    ARTICLE_ID = :articleId
 		                  GROUP BY ARTICLE_ID) D
 		         ON D.ARTICLE_ID = A.ID
-		       LEFT JOIN (SELECT   :articleId ID, ID PREV_ID, TITLE PREV_TITLE
-		                  FROM     T_BLOG_ARTICLE
-		                  WHERE    ID < :articleId
-		                  ORDER BY ID DESC
-		                  LIMIT    0, 1) E
-		         ON E.ID = A.ID
-		       LEFT JOIN (SELECT   :articleId ID, ID NEXT_ID, TITLE NEXT_TITLE
-		                  FROM     T_BLOG_ARTICLE
-		                  WHERE    ID > :articleId
-		                  ORDER BY ID
-		                  LIMIT    0, 1) F
-		         ON F.ID = A.ID
+	]]>
+	</sql>
+
+	<sql name="blog.article.getPrevNextArticleById" desc="根据id获取前后文章">
+	<![CDATA[
+		(SELECT ID, TITLE FROM T_BLOG_ARTICLE WHERE ID < :articleId ORDER BY ID DESC LIMIT 0, 1)
+		UNION
+		(SELECT ID, TITLE FROM T_BLOG_ARTICLE WHERE ID > :articleId ORDER BY ID LIMIT 0, 1)
 	]]>
 	</sql>
 

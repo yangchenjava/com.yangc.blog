@@ -69,7 +69,9 @@ public class BlogResource {
 	@ResponseBody
 	public TBlogArticle getArticleById(Long id) {
 		logger.info("getArticleById");
-		return this.articleService.getArticleById(id, 0);
+		// 如果前台访问文章, 文章阅读次数加1
+		this.articleService.updateArticleReadCount(id);
+		return this.articleService.getArticleById(id);
 	}
 
 	@RequestMapping(value = "getAttrList", method = RequestMethod.POST)
