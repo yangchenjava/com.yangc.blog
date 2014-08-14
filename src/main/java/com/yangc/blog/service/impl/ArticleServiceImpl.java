@@ -19,7 +19,7 @@ import com.yangc.common.Pagination;
 import com.yangc.common.PaginationThreadUtils;
 import com.yangc.dao.BaseDao;
 import com.yangc.dao.JdbcDao;
-import com.yangc.utils.lang.HtmlFilterUtils;
+import com.yangc.utils.lang.JsoupUtils;
 
 @Service
 @SuppressWarnings("unchecked")
@@ -44,7 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
 			this.tagService.delTagsByArticleId(articleId);
 		}
 		article.setTitle(title);
-		article.setContent(content);
+		article.setContent(JsoupUtils.safe(content));
 		article.setCategoryId(categoryId);
 		this.baseDao.save(article);
 		this.tagService.addTags(tags, article.getId());
@@ -149,24 +149,24 @@ public class ArticleServiceImpl implements ArticleService {
 	public List<TBlogArticle> getArticleList_page(String title, Long categoryId, String tag) {
 		String sql = JdbcDao.SQL_MAPPING.get("blog.article.getArticleList_page");
 
-		StringBuilder sb = new StringBuilder("where 1 = 1");
+		StringBuilder sb = new StringBuilder("WHERE 1 = 1");
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		if (StringUtils.isNotBlank(title)) {
-			sb.append(" and a.title LIKE :title");
+			sb.append(" AND A.TITLE LIKE :title");
 			paramMap.put("title", "%" + title + "%");
 		}
 		if (categoryId != null && categoryId != 0) {
-			sb.append(" and a.category_id = :categoryId");
+			sb.append(" AND A.CATEGORY_ID = :categoryId");
 			paramMap.put("categoryId", categoryId);
 		}
 		if (StringUtils.isNotBlank(tag)) {
-			sb.append(" and b.tags LIKE :tag");
+			sb.append(" AND B.TAGS LIKE :tag");
 			paramMap.put("tag", "%" + tag + "%");
 		}
 		if (paramMap.isEmpty()) {
 			sql = sql.replace("${condition}", "");
 		} else {
-			sql = sql.replace("${condition}", sb.toString().replace("1 = 1 and", ""));
+			sql = sql.replace("${condition}", sb.toString().replace("1 = 1 AND", ""));
 		}
 
 		List<Map<String, Object>> mapList = this.jdbcDao.find(sql, paramMap);
@@ -177,7 +177,7 @@ public class ArticleServiceImpl implements ArticleService {
 			TBlogArticle article = new TBlogArticle();
 			article.setId(MapUtils.getLong(map, "ID"));
 			article.setTitle(MapUtils.getString(map, "TITLE"));
-			String content = HtmlFilterUtils.filterHtml(MapUtils.getString(map, "CONTENT"));
+			String content = JsoupUtils.filterHtml(MapUtils.getString(map, "CONTENT"));
 			article.setContent(StringUtils.length(content) <= Constants.ARTICLE_SUMMARY_LIMIT ? content : content.substring(0, Constants.ARTICLE_SUMMARY_LIMIT) + "...");
 			article.setTags(MapUtils.getString(map, "TAGS"));
 			article.setCreateTimeStr(MapUtils.getString(map, "CREATE_TIME"));
