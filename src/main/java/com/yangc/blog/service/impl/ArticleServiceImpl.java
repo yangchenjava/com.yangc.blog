@@ -14,11 +14,11 @@ import com.yangc.blog.bean.TBlogArticle;
 import com.yangc.blog.service.ArticleService;
 import com.yangc.blog.service.CommentService;
 import com.yangc.blog.service.TagService;
-import com.yangc.blog.utils.Constants;
 import com.yangc.common.Pagination;
 import com.yangc.common.PaginationThreadUtils;
 import com.yangc.dao.BaseDao;
 import com.yangc.dao.JdbcDao;
+import com.yangc.utils.Message;
 import com.yangc.utils.lang.JsoupUtils;
 
 @Service
@@ -137,10 +137,10 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public List<TBlogArticle> getArticleListByReadCount() {
-		// 只取阅读次数最多的前十篇文章
+		// 只取阅读次数最多的前几篇文章
 		Pagination pagination = new Pagination();
 		pagination.setPageNow(1);
-		pagination.setPageSize(10);
+		pagination.setPageSize(Integer.parseInt(Message.getMessage("blog.article_hot_count")));
 		PaginationThreadUtils.set(pagination);
 		return this.baseDao.find("select new TBlogArticle(id, title, readCount) from TBlogArticle order by readCount desc", null);
 	}
@@ -172,13 +172,14 @@ public class ArticleServiceImpl implements ArticleService {
 		List<Map<String, Object>> mapList = this.jdbcDao.find(sql, paramMap);
 		if (mapList == null || mapList.isEmpty()) return null;
 
+		int articleSummaryLimit = Integer.parseInt(Message.getMessage("blog.article_summary_limit"));
 		List<TBlogArticle> articleList = new ArrayList<TBlogArticle>();
 		for (Map<String, Object> map : mapList) {
 			TBlogArticle article = new TBlogArticle();
 			article.setId(MapUtils.getLong(map, "ID"));
 			article.setTitle(MapUtils.getString(map, "TITLE"));
 			String content = JsoupUtils.filterHtml(MapUtils.getString(map, "CONTENT"));
-			article.setContent(StringUtils.length(content) <= Constants.ARTICLE_SUMMARY_LIMIT ? content : content.substring(0, Constants.ARTICLE_SUMMARY_LIMIT) + "...");
+			article.setContent(StringUtils.length(content) <= articleSummaryLimit ? content : content.substring(0, articleSummaryLimit) + "...");
 			article.setTags(MapUtils.getString(map, "TAGS"));
 			article.setCreateTimeStr(MapUtils.getString(map, "CREATE_TIME"));
 			article.setReadCount(MapUtils.getLong(map, "READ_COUNT"));
